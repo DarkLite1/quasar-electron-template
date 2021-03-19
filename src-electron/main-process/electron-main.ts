@@ -20,9 +20,9 @@ if (process.env.PROD) {
   global.__statics = __dirname
 }
 
-let mainWindow
+let mainWindow: null | BrowserWindow = null
 
-function createWindow() {
+async function createWindow() {
   /**
    * Initial window options
    */
@@ -33,31 +33,43 @@ function createWindow() {
     webPreferences: {
       // Change from /quasar.conf.js > electron > nodeIntegration;
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
-      nodeIntegration: process.env.QUASAR_NODE_INTEGRATION,
-      nodeIntegrationInWorker: process.env.QUASAR_NODE_INTEGRATION
+      nodeIntegration:
+        process.env.QUASAR_NODE_INTEGRATION?.toLocaleLowerCase() === 'true',
+      nodeIntegrationInWorker:
+        process.env.QUASAR_NODE_INTEGRATION?.toLocaleLowerCase() === 'true'
 
       // More info: /quasar-cli/developing-electron-apps/electron-preload-script
       // preload: path.resolve(__dirname, 'electron-preload.js')
     }
   })
 
-  mainWindow.loadURL(process.env.APP_URL)
+  if (process.env.APP_URL) {
+    try {
+      await mainWindow.loadURL(process.env.APP_URL)
+    } catch (error) {
+      throw new Error(`Failed loading main window: ${error as string}`)
+    }
+  }
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
 }
 
-app.on('ready', createWindow)
-
+app.on('ready', () => {
+  void (async () => {
+    await createWindow()
+  })()
+})
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
-
 app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
+  void (async () => {
+    if (mainWindow === null) {
+      await createWindow()
+    }
+  })()
 })
