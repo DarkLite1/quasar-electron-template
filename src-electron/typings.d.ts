@@ -1,5 +1,9 @@
-import Global = NodeJS.Global
+export {}
 
-export interface IGlobal extends Global {
-  __statics: string
+declare global {
+  namespace NodeJS {
+    interface Global {
+      __statics: string
+    }
+  }
 }

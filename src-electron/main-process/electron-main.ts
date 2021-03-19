@@ -1,7 +1,6 @@
 import { app, BrowserWindow, nativeTheme } from 'electron'
 import { unlinkSync } from 'fs'
 import { join } from 'path'
-import { IGlobal }  from 'src-electron/typings'
 
 try {
   if (
@@ -16,7 +15,6 @@ try {
  * Set `__statics` path to static files in production;
  * The reason we are setting it here is that the path needs to be evaluated at runtime
  */
-declare const global: IGlobal
 
 if (process.env.PROD) {
   global.__statics = __dirname
