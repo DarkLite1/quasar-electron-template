@@ -41,7 +41,8 @@ function createWindow() {
     }
   })
 
-  void mainWindow.loadURL(process.env.APP_URL!)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-floating-promises
+  mainWindow.loadURL(process.env.APP_URL!)
 
   mainWindow.on('closed', () => {
     mainWindow = undefined
