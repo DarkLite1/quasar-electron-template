@@ -6,6 +6,8 @@
   "author": "DarkLite1 <BrechtGijbels@gmail.com>",
   "private": true,
   "scripts": {
+    "dev": "quasar dev -m electron",
+    "build": "quasar build -m electron",
     "lint": "eslint --ext .js,.ts,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
